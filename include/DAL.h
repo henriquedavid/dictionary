@@ -1,13 +1,13 @@
 #ifndef DAL_
 #define DAL_
 
-#include "string"
+#include <cstring>
 
 namespace dic{
 	/// Classe para tratar um dicionário com vetor ordenado.
 	class DAL
 	{
-	protected:
+    protected:
 		/// Alias para chave.
 		using Key = int;
 		/// ALias para daoo.

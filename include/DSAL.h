@@ -1,31 +1,51 @@
-#ifndef DSAL
-#define DSAL
+#ifndef DSAL_H
+#define DSAL_H
+
+#include <cstring>
+#include <algorithm>
+
+#include "DAL.h"
+
+namespace dic{
 
 /// Classe para tratar um dicionário com vetor ordenado.
-class DSAL : public dic::DAL
-{
+    class DSAL : DAL
+    {
+    public:
+        DSAL(int _MaxSz = SIZE): DAL(_MaxSz){ /* Empty */ };
+        virtual ~DSAL() { /* Empty */ };
 
-public:
-	DSAL( int _MaxSz ){ /* empty */ };
-	virtual ~DSAL() { /*empty*/ };
 
-	// Métodos para sobreescrever.
-	/// Remove da lista.
-	bool remove( const Key & _x, Data & );
-	/// Inserir na lista.
-	bool insert( const Key & _novaId, const Data & _novaInfo );
-	/// Recupera a menor chave do dicion´ario .
-	Key min() const;
-	/// Recupera a maior chave do dicion´ario .
-	Key max() const;
-	/// Recupera em _y a chave sucessora a _x , se existir ( true ).
-	bool sucessor( const Key & _x, Key & _y ) const;
-	/// Recupera em _y a chave antecessora a _x , se existir ( true ).
-	bool predecessor( const Key & _x, Key & _y ) const;
+        // Métodos para sobreescrever.
+        /// Remove da lista.
+        bool remove( const Key & _x, Data & );
+        /// Inserir na lista.
+        bool insert( const Key & _novaId, const Data & _novaInfo );
+        /// Recupera a menor chave do dicionário .
+        Key min() const;
+        /// Recupera a maior chave do dicionário .
+        Key max() const;
+        /// Recupera em _y a chave sucessora a _x , se existir ( true ).
+        bool sucessor( const Key & _x, Key & _y ) const;
+        /// Recupera em _y a chave antecessora a _x , se existir ( true ).
+        bool predecessor( const Key & _x, Key & _y ) const;
+        bool search(const Key &_x, Data &_s) const;
 
-private:
-	/// Método para busca auxiliar.
-	int _search( const Key & _x ) const;
+        friend std::ostream & operator<<(std::ostream & _os, const DSAL & _oList)
+        {
+            _os << "[ \n";
+            for( int i(0) ; i < _oList.mi_Length ; ++i ){
+                _os << "{id: " <<  _oList.mpt_Data[i].id << ", info: " << _oList.mpt_Data[i].info << "} \n";
+            }
+            _os << "]";
+            return _os;
+        }
+
+    private:
+        /// Método para busca auxiliar.
+        int _search( const Key & _x ) const;
+    };
 }
+#include "DSAL.inl"
 
 #endif
