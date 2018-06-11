@@ -53,10 +53,3 @@ inline bool DAL::search( const Key & _x, Data & _s ) const{
 	return false;
 
 }
-
-inline bool DAL::remove(  const Key & _x, Data & _s ) const{
-
-
-
-}
-

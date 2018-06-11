@@ -56,12 +56,12 @@ namespace dic{
 
 		/// Envia para saída uma representação em ASCII para a lista.
 		inline friend std::ostream & operator<<(std::ostream & _os, const DAL & _oList){
-			_os << "[ ";
+			_os << "[ \n";
 			for( int i(0) ; i < _oList.mi_Length ; ++i ){
-				_os << "{id: " <<  _oList.mpt_Data[i].id << ", info: " << _oList.mpt_Data[i].info << "} ";
-				_os << "]";
-				return _os;
+				_os << "{id: " <<  _oList.mpt_Data[i].id << ", info: " << _oList.mpt_Data[i].info << "} \n";
 			}
+			_os << "]";
+			return _os;
 		}
 		
 	};
