@@ -37,11 +37,6 @@ namespace dic{
 
 	public:
 
-		/// Método que retorna o tamanho para fins de testes.
-		int size(){
-			return mi_Length;
-		}
-
 		DAL( int _MaxSz );
 		virtual ~DAL() { delete [] mpt_Data; };
 		/// Remove da lista.

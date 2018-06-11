@@ -25,7 +25,7 @@ inline bool DAL::insert( const Key & _newKey, const Data & _newInfo ){
 		return false;
 	}
 
-	auto pos(mpt_Data + mi_Length + 1);
+	auto pos(mpt_Data + mi_Length);
 
 	NodeAL new_NodeAL;
 	new_NodeAL.id = _newKey;
@@ -36,3 +36,27 @@ inline bool DAL::insert( const Key & _newKey, const Data & _newInfo ){
 
 	return true;
 }
+
+inline bool DAL::search( const Key & _x, Data & _s ) const{
+
+	auto begin(mpt_Data);
+	auto end(mpt_Data+mi_Length+1);
+
+	while( begin != end ){
+		if( begin->id == _x ){
+			_s = begin->info;
+			return true;
+		}
+		++begin;
+	}
+
+	return false;
+
+}
+
+inline bool DAL::remove(  const Key & _x, Data & _s ) const{
+
+
+
+}
+
