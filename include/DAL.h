@@ -1,6 +1,8 @@
 #ifndef DAL_
 #define DAL_
 
+#include "string"
+
 namespace dic{
 
 	class DAL
@@ -18,6 +20,7 @@ namespace dic{
 			Key id;
 			/// A informação é uma cadeia de caracteres.
 			Data info;
+
 		};
 
 		/// Tamanho default da lista.
@@ -34,7 +37,12 @@ namespace dic{
 
 	public:
 
-		DAL( int _MaxSz = SIZE );
+		/// Método que retorna o tamanho para fins de testes.
+		int size(){
+			return mi_Length;
+		}
+
+		DAL( int _MaxSz );
 		virtual ~DAL() { delete [] mpt_Data; };
 		/// Remove da lista.
 		bool remove( const Key & _x, Data & _s ) const;
@@ -62,6 +70,8 @@ namespace dic{
 		}
 		
 	};
+
+	#include "DAL.inl"
 
 }
 #endif
