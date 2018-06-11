@@ -61,8 +61,6 @@ inline bool DAL::search( const Key & _x, Data & _s ) const{
 
 }
 
-/*inline bool DAL::remove( const Key & _x, Data & _s ) const;
-*/
 inline DAL::Key DAL::min() const{
 
 	auto begin(mpt_Data);
@@ -106,7 +104,103 @@ inline DAL::Key DAL::max() const{
 	return maior_chave;
 }
 
-/*
-inline bool DAL::sucessor( const Key & _x, Key & _y ) const;
 
-inline bool DAL::predecessor( const Key & _x, Key & _y ) const;	*/
+inline bool DAL::remove( const Key & _x, Data & _s ){
+	auto begin(mpt_Data);
+	auto end(mpt_Data+mi_Length);
+
+	// Percorre o vetor procurando a chave.
+	while(begin != end){
+		if(begin->id == _x){
+			// Se encontrou a chave então verifique se o dado é o mesmo.
+			if(begin->info == _s){
+				// Se for o mesmo dado então sobreescreva com as informações seguintes.
+				auto next(begin++);
+				while(begin != end){
+					begin = next;
+					begin++;
+					next++;
+				}
+				// Diminua uma quantidade.
+				--mi_Length;
+				return true;
+			}
+		}
+		++begin;
+	}
+
+
+	return false;
+}
+
+inline bool DAL::sucessor( const Key & _x, Key & _y ) const{
+
+	auto begin(mpt_Data);
+	auto end(mpt_Data+mi_Length);
+
+	// Verifica se há algum dado.
+	if(mi_Length <= 1)
+		return false;
+	
+	 if(_x == (mpt_Data+mi_Length-1)->id)
+		return false;
+	
+
+	int sucessor;
+
+	// Encontra um valor menor que o passado.
+	auto b_ (begin);
+	if(begin->id != _x){
+		while(b_ != end){
+			if(b_->id > _x)
+				sucessor = b_->id;
+			b_++;
+		}
+	}
+
+	// Percorre o vetor procurando o sucessor da chave _x, sendo a que possui a menor distancia com o valor de _x.
+	while( begin != end ){
+		if( ( _x - begin->id ) > (_x - sucessor) && (_x - begin->id) < 0 ){
+			sucessor = begin->id;
+		}
+		++begin;
+	}
+
+	_y = sucessor;
+
+	return true;
+
+}
+
+
+inline bool DAL::predecessor( const Key & _x, Key & _y ) const{
+
+	auto begin(mpt_Data);
+	auto end(mpt_Data+mi_Length);
+
+
+	// Verifica se há algum dado.
+	if(mi_Length <= 1)
+		return false;
+
+	if(_x == mpt_Data->id)
+		return false;
+
+	int predecessor;
+
+	if(begin->id != _x)
+		predecessor = begin->id;
+
+	// Percorre o vetor procurando o predecessor da chave _x, sendo a que possui a menor distancia com o valor de _x.
+	while( begin != end ){
+		if( ( _x - begin->id ) < (_x -predecessor) && (_x - begin->id) > 0 ){
+			predecessor = begin->id;
+		}
+		++begin;
+	}
+
+	_y = predecessor;
+
+	return true;
+
+}

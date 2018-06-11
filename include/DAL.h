@@ -4,7 +4,7 @@
 #include "string"
 
 namespace dic{
-
+	/// Classe para tratar um dicionário com vetor ordenado.
 	class DAL
 	{
 	protected:
@@ -40,7 +40,7 @@ namespace dic{
 		DAL( int _MaxSz );
 		virtual ~DAL() { delete [] mpt_Data; };
 		/// Remove da lista.
-		bool remove( const Key & _x, Data & _s ) const;
+		bool remove( const Key & _x, Data & _s );
 		/// Busca pública.
 		bool search( const Key & _x, Data & _s ) const;
 		/// Insere na lista.
