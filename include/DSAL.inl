@@ -85,7 +85,7 @@ int dic::DSAL::_search(const Key &_x) const
     int begin_index= 0;
     int end_index = mi_Length;
     int middle_index;
-    while(begin_index < end_index)
+    while(begin_index <= end_index)
     {
         middle_index = begin_index + (end_index - begin_index)/2;
         auto key = mpt_Data[middle_index].id;
