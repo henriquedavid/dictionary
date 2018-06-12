@@ -1,7 +1,17 @@
 #include "DSAL.h"
 
-bool dic::DSAL::remove( const Key & _x, Data &_s)
+
+template < typename Key, typename Data, typename KeyComparator >
+inline dic::DSAL< Key, Data, KeyComparator >::DSAL( int _MaxSz ){
+    mi_Length = 0;
+    mi_Capacity = _MaxSz;
+    mpt_Data = new NodeAL[SIZE];
+}
+
+template < typename Key, typename Data, typename KeyComparator >
+inline bool dic::DSAL< Key, Data, KeyComparator >::remove( const Key & _x, Data &_s)
 {
+
     int index = _search(_x);
     if(index == -1)
         return false;
@@ -14,8 +24,11 @@ bool dic::DSAL::remove( const Key & _x, Data &_s)
     return true;
 }
 
-bool dic::DSAL::insert( const Key & _novaId, const Data & _novaInfo )
+template < typename Key, typename Data, typename KeyComparator >
+inline bool dic::DSAL< Key, Data, KeyComparator >::insert( const Key & _novaId, const Data & _novaInfo )
 {
+    KeyComparator cmp;
+
     // verifica capacidade
     if(mi_Length == mi_Capacity)
         return false;
@@ -24,34 +37,43 @@ bool dic::DSAL::insert( const Key & _novaId, const Data & _novaInfo )
     auto end(mpt_Data + mi_Length);
     while(slow < end)
     {
-        if(slow->id > _novaId)
+        if(cmp(slow->id, _novaId) == 1)
             break;
         ++slow;
     }
-    auto fast(slow);
-    while(fast + 1 <= end)
+    auto fast(end);
+
+    while(fast > slow)
     {
-        std::swap(*fast, *(fast+1));
-        fast++;
+        std::swap(*fast, *(fast-1));
+        fast--;
     }
+
     slow->id = _novaId;
     slow->info = _novaInfo;
     mi_Length++;
+
     return true;
 }
-dic::DSAL::Key dic::DSAL::min() const
+
+template < typename Key, typename Data, typename KeyComparator >
+inline Key dic::DSAL< Key, Data, KeyComparator >::min() const
 {
     if(mi_Length == 0)
         throw std::out_of_range("[Error]: Dictionary has no elements.");
     return mpt_Data[0].id;
 }
-dic::DSAL::Key dic::DSAL::max() const
+
+template < typename Key, typename Data, typename KeyComparator >
+inline Key dic::DSAL< Key, Data, KeyComparator >::max() const
 {
     if(mi_Length == 0)
         throw std::out_of_range("[Error]: Dictionary has no elements.");
     return mpt_Data[mi_Length-1].id;
 }
-bool dic::DSAL::sucessor( const Key & _x, Key & _y ) const
+
+template < typename Key, typename Data, typename KeyComparator >
+inline bool dic::DSAL< Key, Data, KeyComparator >::sucessor( const Key & _x, Key & _y ) const
 {
     int index = _search(_x);
     if(index >= mi_Length)
@@ -60,7 +82,8 @@ bool dic::DSAL::sucessor( const Key & _x, Key & _y ) const
     return true;
 }
 
-bool dic::DSAL::predecessor( const Key & _x, Key & _y ) const
+template < typename Key, typename Data, typename KeyComparator >
+inline bool dic::DSAL< Key, Data, KeyComparator >::predecessor( const Key & _x, Key & _y ) const
 {
     int index = _search(_x);
     if(index < 1)
@@ -69,7 +92,8 @@ bool dic::DSAL::predecessor( const Key & _x, Key & _y ) const
     return true;
 }
 
-bool dic::DSAL::search(const Key &_x, Data &_s) const
+template < typename Key, typename Data, typename KeyComparator >
+inline bool dic::DSAL< Key, Data, KeyComparator >::search(const Key &_x, Data &_s) const
 {
     // realiza a busca binária pela chave x;
     int index = _search(_x);
@@ -79,8 +103,13 @@ bool dic::DSAL::search(const Key &_x, Data &_s) const
     return true;
 
 }
-int dic::DSAL::_search(const Key &_x) const
+
+template < typename Key, typename Data, typename KeyComparator >
+inline int dic::DSAL< Key, Data, KeyComparator >::_search(const Key &_x) const
 {
+
+    KeyComparator cmp;
+
     // acha o meio do vetor
     int begin_index= 0;
     int end_index = mi_Length;
@@ -89,9 +118,9 @@ int dic::DSAL::_search(const Key &_x) const
     {
         middle_index = begin_index + (end_index - begin_index)/2;
         auto key = mpt_Data[middle_index].id;
-        if(key == _x)
+        if(cmp(key, _x) == 0)
             return middle_index;
-        else if(key > _x)
+        else if(cmp(key, _x) == 1)
         {
             end_index = middle_index;
         }

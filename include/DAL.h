@@ -2,16 +2,14 @@
 #define DAL_
 
 #include <cstring>
+#include <stdexcept>
 
 namespace dic{
 	/// Classe para tratar um dicionário com vetor ordenado.
+	template < typename Key, typename Data, typename KeyComparator >
 	class DAL
 	{
     protected:
-		/// Alias para chave.
-		using Key = int;
-		/// ALias para daoo.
-		using Data = std::string;
 
 		/// Estrutura do nó, representando o par chave-informação.
 		struct NodeAL
@@ -37,7 +35,7 @@ namespace dic{
 
 	public:
 
-		DAL( int _MaxSz );
+		DAL( int _MaxSz = SIZE );
 		virtual ~DAL() { delete [] mpt_Data; };
 		/// Remove da lista.
 		bool remove( const Key & _x, Data & _s );

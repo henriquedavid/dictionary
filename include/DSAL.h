@@ -9,12 +9,15 @@
 namespace dic{
 
 /// Classe para tratar um dicionário com vetor ordenado.
-    class DSAL : DAL
+    template < typename Key, typename Data, typename KeyComparator >
+    class DSAL : public DAL<Key, Data, KeyComparator>
     {
-    public:
-        DSAL(int _MaxSz = SIZE): DAL(_MaxSz){ /* Empty */ };
-        virtual ~DSAL() { /* Empty */ };
 
+        using NodeAL = typename DAL<Key, Data, KeyComparator>::NodeAL;
+
+    public:
+        DSAL(int _MaxSz = SIZE);
+        virtual ~DSAL() { /* Empty */ };
 
         // Métodos para sobreescrever.
         /// Remove da lista.
@@ -44,6 +47,14 @@ namespace dic{
     private:
         /// Método para busca auxiliar.
         int _search( const Key & _x ) const;
+        /// Tamanho default da lista.
+        static const int SIZE = 50;
+        /// Comprimento atual da lista.
+        int mi_Length;
+        /// Capacidade máxima de armazenamento.
+        int mi_Capacity;
+        /// Área de armazenamento: vetor alocado dinamicamente.
+       NodeAL * mpt_Data;
     };
 }
 #include "DSAL.inl"

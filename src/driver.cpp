@@ -4,6 +4,18 @@
 #include "DAL.h"
 #include "DSAL.h" // Rodar com -Iinclude no g++
 
+class MyKeyComparator {
+public:
+    int operator()(const int &lhs, const int &rhs ) const{
+        if( lhs < rhs )
+            return -1;
+        else if( lhs == rhs )
+            return 0;
+        else
+            return 1;   
+    }
+};  
+
 int main(){
 
 	//================================================================
@@ -11,8 +23,9 @@ int main(){
 	//================================================================
 
 	{
+        std::cout << "==============    VERSÃO DAL    ==============\n";
+		dic::DAL< int, std::string, MyKeyComparator > dic_;
 
-		dic::DAL dic_;
 
 		// ============== Teste de Inserção ============== 
 
@@ -81,7 +94,7 @@ int main(){
 		bool pred = dic_.predecessor(2, key_1);
 
 		if(pred)
-			std::cout << "A chave predecessora é " << key_1 << std::endl;
+			std::cout << "A chave predecessora de 2 é " << key_1 << std::endl;
 		else
 			std::cout << "Não foi possivel encontrar a prodecessora!\n";
 
@@ -91,7 +104,7 @@ int main(){
 		bool suc = dic_.sucessor(2, key_2);
 
 		if(suc)
-			std::cout << "A chave sucessora é " << key_2 << std::endl;
+			std::cout << "A chave sucessora de 2 é " << key_2 << std::endl;
 		else
 			std::cout << "Não foi possivel encontrar a sucessora!\n";
 
@@ -107,8 +120,10 @@ int main(){
 
     {
 
-        dic::DSAL dic_;
         std::cout << "==============    VERSÃO DSAL    ==============\n";
+
+        dic::DSAL<int, std::string, MyKeyComparator > dic_;
+
         // ============== Teste de Inserção ==============
 
         bool insercao_1 = dic_.insert(1, "Henrique");
@@ -173,7 +188,7 @@ int main(){
         bool pred = dic_.predecessor(2, key_1);
 
         if(pred)
-            std::cout << "A chave predecessora é " << key_1 << std::endl;
+            std::cout << "A chave predecessora de 2 é " << key_1 << std::endl;
         else
             std::cout << "Não foi possivel encontrar a prodecessora!\n";
 
@@ -183,7 +198,7 @@ int main(){
         bool suc = dic_.sucessor(2, key_2);
 
         if(suc)
-            std::cout << "A chave sucessora é " << key_2 << std::endl;
+            std::cout << "A chave sucessora de 2 é " << key_2 << std::endl;
         else
             std::cout << "Não foi possivel encontrar a sucessora!\n";
 
