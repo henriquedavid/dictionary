@@ -9,11 +9,11 @@ cmake -H. -Bbuild
 cmake --build build -- -j3
 ```
 
-- caso não esteja com o comando make disponivel, você poderá usar o g++ com o comando dentro da pasta raiz:  
+- caso não esteja com o comando cmake disponivel, você poderá usar o g++ com o comando dentro da pasta raiz:  
 ```g++ -Wall -std=c++11 src/driver.cpp -o driver -Iinclude```  
 
 ## Executar
-Após a compilação, você poderá executar o código com o comando ```./bin/dictionary```, ou ```./driver``` (se não usou make).
+Após a compilação, você poderá executar o código com o comando ```./bin/dictionary```, ou ```./driver``` (na pasta src, se não usou cmake).
 
 ### Authorship
 - Henrique David de Medeiros	(henriquemed101@gmail.com)
