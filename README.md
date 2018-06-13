@@ -13,7 +13,7 @@ cmake --build build -- -j3
 ```g++ -Wall -std=c++11 src/driver.cpp -o driver -Iinclude```  
 
 ## Executar
-Após a compilação, você poderá executar o código com o comando ```./bin/dictionary```, ou ```./driver``` (na pasta src, se não usou cmake).
+Após a compilação, você poderá executar o código com o comando ```./bin/dictionary```, ou ```./driver``` (se não usou cmake).
 
 ### Authorship
 - Henrique David de Medeiros	(henriquemed101@gmail.com)
