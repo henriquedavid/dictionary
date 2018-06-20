@@ -1,6 +1,4 @@
-#include "DAL.h"
-
-using namespace dic;
+#include "dal.h"
 
 template < typename Key, typename Data, typename KeyComparator >
 inline DAL< Key, Data, KeyComparator >::DAL( int _MaxSz ){
@@ -19,7 +17,7 @@ inline bool DAL< Key, Data, KeyComparator >::insert( const Key & _newKey, const 
 
 	// Verifica se não existe uma chave com o valor de _newKey. 
 	while(begin != end){
-		if( cmp( begin->id, _newKey ) == 0 )
+        if(!cmp( begin->id, _newKey ) && !cmp(_newKey, begin->id))
 			return false;
 		begin++;
 	}
@@ -33,11 +31,9 @@ inline bool DAL< Key, Data, KeyComparator >::insert( const Key & _newKey, const 
 
 	// Insere as informações em um novo node;
 	NodeAL new_NodeAL;
-	new_NodeAL.id = _newKey;
-	new_NodeAL.info = _newInfo;
+    pos->id = _newKey;
+    pos->info = _newInfo;
 
-	// Atribui o novo node a lista.
-	*pos = new_NodeAL;
 	// Aumenta o tamanho ocupado.
 	++mi_Length;
 
@@ -83,7 +79,7 @@ inline Key DAL< Key, Data, KeyComparator >::min() const{
 
 	// Percorre o vetor procurando a menor chave.
 	while( begin != end ){
-		if( cmp(begin->id, menor_chave) == -1 ){
+        if(cmp(begin->id, menor_chave)){
 			menor_chave = begin->id;
 		}
 		++begin;
@@ -109,7 +105,7 @@ inline  Key DAL< Key, Data, KeyComparator >::max() const{
 
 	// Percorre o vetor procurando a menor chave.
 	while( begin != end ){
-		if( cmp(begin->id, maior_chave) == 1 ){
+        if(cmp(maior_chave, begin->id)){
 			maior_chave = begin->id;
 		}
 		++begin;
@@ -120,37 +116,33 @@ inline  Key DAL< Key, Data, KeyComparator >::max() const{
 
 template < typename Key, typename Data, typename KeyComparator >
 inline bool DAL< Key, Data, KeyComparator >::remove( const Key & _x, Data & _s ){
-	auto begin(mpt_Data);
-	auto end(mpt_Data+mi_Length);
+    auto begin(mpt_Data);
+    auto end(mpt_Data+mi_Length);
 
-	KeyComparator cmp;
+    KeyComparator cmp;
 
-	// Percorre o vetor procurando a chave.
-	while(begin != end){
-		if(cmp(begin->id, _x) == 0 ){
-			// Se encontrou a chave então verifique se o dado é o mesmo.
-			if(begin->info == _s){
-				// Se for o mesmo dado então sobreescreva com as informações seguintes.
-				auto next(begin++);
-				while(begin != end){
-					begin = next;
-					begin++;
-					next++;
-				}
-				// Diminua uma quantidade.
-				--mi_Length;
-				return true;
-			}
-		}
-		++begin;
-	}
-
-
-	return false;
+    // Percorre o vetor procurando a chave.
+    while(begin != end){
+        if(cmp(begin->id, _x) == false && cmp(_x, begin->id) == false){
+            _s = begin->info;
+            // Realoca os dados
+            auto next(begin++);
+            while(begin != end){
+                std::swap(*begin, *next);
+                begin++;
+                next++;
+            }
+            // Diminua uma quantidade.
+            --mi_Length;
+            return true;
+        }
+        ++begin;
+    }
+    return false;
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-inline bool DAL< Key, Data, KeyComparator >::sucessor( const Key & _x, Key & _y ) const{
+inline bool DAL< Key, Data, KeyComparator >::successor( const Key & _x, Key & _y ) const{
 
 	auto begin(mpt_Data);
 	auto end(mpt_Data+mi_Length);
@@ -161,7 +153,7 @@ inline bool DAL< Key, Data, KeyComparator >::sucessor( const Key & _x, Key & _y 
 	if(mi_Length <= 1)
 		return false;
 	
-	 if(cmp(_x, (mpt_Data+mi_Length-1)->id) == 0)
+     if(!cmp(_x, (mpt_Data+mi_Length-1)->id) && !cmp((mpt_Data+mi_Length-1)->id, _x))
 		return false;
 	
 
@@ -179,7 +171,7 @@ inline bool DAL< Key, Data, KeyComparator >::sucessor( const Key & _x, Key & _y 
 
 	// Percorre o vetor procurando o sucessor da chave _x, sendo a que possui a menor distancia com o valor de _x.
 	while( begin != end ){
-		if( cmp(( _x - begin->id ), (_x - sucessor)) == 1 && cmp((_x - begin->id), 0) == -1 ){
+        if( !cmp(( _x - begin->id ), (_x - sucessor)) && cmp((_x - begin->id), 0) ){
 			sucessor = begin->id;
 		}
 		++begin;
@@ -214,7 +206,7 @@ inline bool DAL< Key, Data, KeyComparator >::predecessor( const Key & _x, Key & 
 
 	// Percorre o vetor procurando o predecessor da chave _x, sendo a que possui a menor distancia com o valor de _x.
 	while( begin != end ){
-		if( cmp(( _x - begin->id ), (_x -predecessor)) == -1 && cmp((_x - begin->id),0 ) == 1){
+        if(cmp(( _x - begin->id ), (_x -predecessor)) && cmp(0, (_x - begin->id))){
 			predecessor = begin->id;
 		}
 		++begin;
@@ -227,7 +219,7 @@ inline bool DAL< Key, Data, KeyComparator >::predecessor( const Key & _x, Key & 
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-int DAL< Key, Data, KeyComparator >::_search( const Key & _x ) const{
+int DAL<Key,Data,KeyComparator>::_search( const Key & _x ) const{
 
 	auto begin(mpt_Data);
 	auto end(mpt_Data+mi_Length);
@@ -242,3 +234,17 @@ int DAL< Key, Data, KeyComparator >::_search( const Key & _x ) const{
 
 	return -1;
 }
+
+template < typename Key, typename Data, typename KeyComparator >
+size_t DAL<Key,Data,KeyComparator>::capacity()
+{
+    return mi_Capacity;
+}
+
+template < typename Key, typename Data, typename KeyComparator >
+bool DAL<Key,Data,KeyComparator>::empty()
+{
+    return mi_Length == 0;
+}
+
+

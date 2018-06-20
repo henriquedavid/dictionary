@@ -1,8 +1,9 @@
+/*
 #include <iostream>
 #include <string>
 
-#include "../include/DAL.h"
-#include "../include/DSAL.h" // Rodar com -Iinclude no g++
+#include "DAL.h"
+#include "DSAL.h" // Rodar com -Iinclude no g++
 
 class MyKeyComparator {
 public:
@@ -208,4 +209,4 @@ int main(){
     }
 
 	return 0;
-}
+}*/

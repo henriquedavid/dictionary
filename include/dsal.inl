@@ -1,15 +1,15 @@
-#include "DSAL.h"
+#include "dsal.h"
 
 
 template < typename Key, typename Data, typename KeyComparator >
-inline dic::DSAL< Key, Data, KeyComparator >::DSAL( int _MaxSz ){
+inline DSAL< Key, Data, KeyComparator >::DSAL( int _MaxSz ){
     mi_Length = 0;
     mi_Capacity = _MaxSz;
     mpt_Data = new NodeAL[SIZE];
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-inline bool dic::DSAL< Key, Data, KeyComparator >::remove( const Key & _x, Data &_s)
+inline bool DSAL< Key, Data, KeyComparator >::remove( const Key & _x, Data &_s)
 {
 
     int index = _search(_x);
@@ -25,7 +25,7 @@ inline bool dic::DSAL< Key, Data, KeyComparator >::remove( const Key & _x, Data 
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-inline bool dic::DSAL< Key, Data, KeyComparator >::insert( const Key & _novaId, const Data & _novaInfo )
+inline bool DSAL< Key, Data, KeyComparator >::insert( const Key & _novaId, const Data & _novaInfo )
 {
     KeyComparator cmp;
 
@@ -57,7 +57,7 @@ inline bool dic::DSAL< Key, Data, KeyComparator >::insert( const Key & _novaId, 
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-inline Key dic::DSAL< Key, Data, KeyComparator >::min() const
+inline Key DSAL< Key, Data, KeyComparator >::min() const
 {
     if(mi_Length == 0)
         throw std::out_of_range("[Error]: Dictionary has no elements.");
@@ -65,7 +65,7 @@ inline Key dic::DSAL< Key, Data, KeyComparator >::min() const
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-inline Key dic::DSAL< Key, Data, KeyComparator >::max() const
+inline Key DSAL< Key, Data, KeyComparator >::max() const
 {
     if(mi_Length == 0)
         throw std::out_of_range("[Error]: Dictionary has no elements.");
@@ -73,7 +73,7 @@ inline Key dic::DSAL< Key, Data, KeyComparator >::max() const
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-inline bool dic::DSAL< Key, Data, KeyComparator >::sucessor( const Key & _x, Key & _y ) const
+inline bool DSAL< Key, Data, KeyComparator >::sucessor( const Key & _x, Key & _y ) const
 {
     int index = _search(_x);
     if(index >= mi_Length)
@@ -83,7 +83,7 @@ inline bool dic::DSAL< Key, Data, KeyComparator >::sucessor( const Key & _x, Key
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-inline bool dic::DSAL< Key, Data, KeyComparator >::predecessor( const Key & _x, Key & _y ) const
+inline bool DSAL< Key, Data, KeyComparator >::predecessor( const Key & _x, Key & _y ) const
 {
     int index = _search(_x);
     if(index < 1)
@@ -93,7 +93,7 @@ inline bool dic::DSAL< Key, Data, KeyComparator >::predecessor( const Key & _x, 
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-inline bool dic::DSAL< Key, Data, KeyComparator >::search(const Key &_x, Data &_s) const
+inline bool DSAL< Key, Data, KeyComparator >::search(const Key &_x, Data &_s) const
 {
     // realiza a busca binária pela chave x;
     int index = _search(_x);
@@ -105,7 +105,7 @@ inline bool dic::DSAL< Key, Data, KeyComparator >::search(const Key &_x, Data &_
 }
 
 template < typename Key, typename Data, typename KeyComparator >
-inline int dic::DSAL< Key, Data, KeyComparator >::_search(const Key &_x) const
+inline int DSAL< Key, Data, KeyComparator >::_search(const Key &_x) const
 {
 
     KeyComparator cmp;
