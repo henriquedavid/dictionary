@@ -156,14 +156,13 @@ inline bool DAL< Key, Data, KeyComparator >::successor( const Key & _x, Key & _y
      if(!cmp(_x, (mpt_Data+mi_Length-1)->id) && !cmp((mpt_Data+mi_Length-1)->id, _x))
 		return false;
 	
-
 	int sucessor;
 
 	// Encontra um valor menor que o passado.
 	auto b_ (begin);
-	if(!cmp(begin->id, _x) == 0){
+    if(cmp(begin->id, _x) || cmp(_x, begin->id)){
 		while(b_ != end){
-			if(cmp(b_->id, _x) == 1)
+            if(cmp(_x, b_->id))
 				sucessor = b_->id;
 			b_++;
 		}

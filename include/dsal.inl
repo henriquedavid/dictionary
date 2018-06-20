@@ -27,6 +27,14 @@ inline bool DSAL< Key, Data, KeyComparator >::remove( const Key & _x, Data &_s)
 template < typename Key, typename Data, typename KeyComparator >
 inline bool DSAL< Key, Data, KeyComparator >::insert( const Key & _novaId, const Data & _novaInfo )
 {
+    // caso especial da lista vazia
+    if(mi_Length == 0)
+    {
+        ++mi_Length;
+        mpt_Data->id = _novaId;
+        mpt_Data->info = _novaInfo;
+        return true;
+    }
     KeyComparator cmp;
 
     // verifica capacidade
@@ -37,10 +45,12 @@ inline bool DSAL< Key, Data, KeyComparator >::insert( const Key & _novaId, const
     auto end(mpt_Data + mi_Length);
     while(slow < end)
     {
-        if(cmp(slow->id, _novaId) == 1)
+        if(!cmp(slow->id, _novaId))
             break;
         ++slow;
     }
+    if(slow != end and !cmp(_novaId, slow->id))
+        return false;
     auto fast(end);
 
     while(fast > slow)
@@ -118,9 +128,9 @@ inline int DSAL< Key, Data, KeyComparator >::_search(const Key &_x) const
     {
         middle_index = begin_index + (end_index - begin_index)/2;
         auto key = mpt_Data[middle_index].id;
-        if(cmp(key, _x) == 0)
+        if(!cmp(key, _x) and !cmp(_x, key))
             return middle_index;
-        else if(cmp(key, _x) == 1)
+        else if(cmp(_x, key))
         {
             end_index = middle_index;
         }

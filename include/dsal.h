@@ -48,13 +48,13 @@ private:
     /// Método para busca auxiliar.
     int _search( const Key & _x ) const;
     /// Tamanho default da lista.
-    static const int SIZE = 50;
+    using DAL<Key, Data, KeyComparator>::SIZE;
     /// Comprimento atual da lista.
-    int mi_Length;
+    using DAL<Key, Data, KeyComparator>::mi_Length;
     /// Capacidade máxima de armazenamento.
-    int mi_Capacity;
+    using DAL<Key, Data, KeyComparator>::mi_Capacity;
     /// Área de armazenamento: vetor alocado dinamicamente.
-    NodeAL * mpt_Data;
+    using DAL<Key, Data, KeyComparator>::mpt_Data;
 };
 
 #include "dsal.inl"
