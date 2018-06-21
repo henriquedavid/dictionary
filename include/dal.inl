@@ -147,38 +147,17 @@ inline bool DAL< Key, Data, KeyComparator >::successor( const Key & _x, Key & _y
 	auto begin(mpt_Data);
 	auto end(mpt_Data+mi_Length);
 
-	KeyComparator cmp;
+    KeyComparator cmp;
+    auto min = _x;
 
-	// Verifica se há algum dado.
-	if(mi_Length <= 1)
-		return false;
-	
-     if(!cmp(_x, (mpt_Data+mi_Length-1)->id) && !cmp((mpt_Data+mi_Length-1)->id, _x))
-		return false;
-	
-	int sucessor;
-
-	// Encontra um valor menor que o passado.
-	auto b_ (begin);
-    if(cmp(begin->id, _x) || cmp(_x, begin->id)){
-		while(b_ != end){
-            if(cmp(_x, b_->id))
-				sucessor = b_->id;
-			b_++;
-		}
-	}
-
-	// Percorre o vetor procurando o sucessor da chave _x, sendo a que possui a menor distancia com o valor de _x.
-	while( begin != end ){
-        if( !cmp(( _x - begin->id ), (_x - sucessor)) && cmp((_x - begin->id), 0) ){
-			sucessor = begin->id;
-		}
-		++begin;
-	}
-
-	_y = sucessor;
-
-	return true;
+    while(begin != end)
+    {
+        if(cmp(_x, begin->id) && cmp(begin->id, min))
+            min = begin->id;
+        ++begin;
+    }
+    _y = min;
+    return _x != min;
 
 }
 
@@ -189,31 +168,16 @@ inline bool DAL< Key, Data, KeyComparator >::predecessor( const Key & _x, Key & 
 	auto end(mpt_Data+mi_Length);
 
 	KeyComparator cmp;
+    auto max = _x;
 
-
-	// Verifica se há algum dado.
-	if(mi_Length <= 1)
-		return false;
-
-	if(_x == mpt_Data->id)
-		return false;
-
-	int predecessor;
-
-	if(begin->id != _x)
-		predecessor = begin->id;
-
-	// Percorre o vetor procurando o predecessor da chave _x, sendo a que possui a menor distancia com o valor de _x.
-	while( begin != end ){
-        if(cmp(( _x - begin->id ), (_x -predecessor)) && cmp(0, (_x - begin->id))){
-			predecessor = begin->id;
-		}
-		++begin;
-	}
-
-	_y = predecessor;
-
-	return true;
+    while(begin != end)
+    {
+       if(cmp(_x, begin->id) && cmp(max, begin->id))
+            max = begin->id;
+        ++begin;
+    }
+    _y = max;
+    return _x != max;
 
 }
 
@@ -224,6 +188,7 @@ int DAL<Key,Data,KeyComparator>::_search( const Key & _x ) const{
 	auto end(mpt_Data+mi_Length);
 
 	KeyComparator cmp;
+
 
 	while( begin != end ){
 		if( cmp(_x, begin->id ) == 0)
