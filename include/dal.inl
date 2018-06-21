@@ -1,4 +1,5 @@
 #include "dal.h"
+#include "dsal.h"
 
 template < typename Key, typename Data, typename KeyComparator >
 inline DAL< Key, Data, KeyComparator >::DAL( int _MaxSz ){
